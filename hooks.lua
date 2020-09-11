@@ -73,7 +73,7 @@ function OnPlayerPlacingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockTy
 	local sql = "SELECT towns.town_id, towns.nation_id, towns.town_permissions FROM plots INNER JOIN towns ON plots.town_id = towns.town_id WHERE chunkX = ? AND chunkZ = ? AND world = ?";
     local parameters = {math.floor(BlockX / 16), math.floor(BlockZ / 16), Player:GetWorld():GetName()};
     local town = ExecuteStatement(sql, parameters)[1];
-    if not (town) then --The block being broken is not part of a town, so placing is allowed
+    if town == nil then --The block being broken is not part of a town, so placing is allowed
 		return true;
 	else
 		if (town[1] == GetPlayerTown(Player:GetUUID())) then
@@ -144,7 +144,7 @@ function OnPlayerUsingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, CursorX, 
     local parameters = {math.floor(BlockX / 16), math.floor(BlockZ / 16), Player:GetWorld():GetName()};
     local town = ExecuteStatement(sql, parameters)[1];
 
-    if not (town) then --The block being used is not part of a town, so using is allowed
+    if town == nil then --The block being used is not part of a town, so using is allowed
 		return true;
 	else
 		if (town[1] == GetPlayerTown(Player:GetUUID())) then
@@ -268,7 +268,7 @@ function OnSpawningMonster(World, Monster)
 		local parameters = {Monster:GetChunkX(), Monster:GetChunkZ(), World:GetName()};
 		local town = ExecuteStatement(sql, parameters)[1];
 
-		if (town) then -- Check if the mob is in a plot
+		if town != nil -- Check if the mob is in a plot
 			if not (bit32.band(town[1], PLOTMOBSINHERIT) == 0) then -- The plot inherits it's mob spawning property from the town
 				if (bit32.band(town[2], TOWNMOBSENABLED) == 0) then -- Mob spawning is not allowed by the town
 					return true;
