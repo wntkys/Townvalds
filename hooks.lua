@@ -268,7 +268,7 @@ function OnSpawningMonster(World, Monster)
 		local parameters = {Monster:GetChunkX(), Monster:GetChunkZ(), World:GetName()};
 		local town = ExecuteStatement(sql, parameters)[1];
 
-		if town != nil -- Check if the mob is in a plot
+		if town  -- Check if the mob is in a plot
 			if not (bit32.band(town[1], PLOTMOBSINHERIT) == 0) then -- The plot inherits it's mob spawning property from the town
 				if (bit32.band(town[2], TOWNMOBSENABLED) == 0) then -- Mob spawning is not allowed by the town
 					return true;
