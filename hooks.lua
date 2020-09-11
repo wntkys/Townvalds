@@ -52,8 +52,8 @@ function OnPlayerBreakingBlock(Player, BlockX, BlockY, BlockZ, BlockFace, BlockT
 	local sql = "SELECT towns.town_id, towns.nation_id, towns.town_permissions FROM plots INNER JOIN towns ON plots.town_id = towns.town_id WHERE chunkX = ? AND chunkZ = ? AND world = ?";
     local parameters = {math.floor(BlockX / 16), math.floor(BlockZ / 16), Player:GetWorld():GetName()};
     local town = ExecuteStatement(sql, parameters)[1];
-    LOG(not (town))
-    if not (town) then --The block being broken is not part of a town, so breaking is allowed
+    LOG(town == nil)
+    if town == nil then --The block being broken is not part of a town, so breaking is allowed
 		return true;
 		
 	else
